@@ -1,0 +1,103 @@
+package com.hbhb.cw.authserver.web.controller;
+
+import com.hbhb.common.util.JsonUtil;
+import com.hbhb.cw.authserver.bean.AuthToken;
+import com.hbhb.cw.authserver.enums.AuthEnum;
+import com.hbhb.cw.authserver.redis.RedisHelper;
+import com.hbhb.cw.authserver.rpc.SysUserApiExp;
+import com.hbhb.cw.systemcenter.model.SysUser;
+import com.hbhb.cw.systemcenter.vo.SysUserInfo;
+
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.SneakyThrows;
+
+/**
+ * @author xiaokang
+ * @since 2020-10-09
+ */
+@Tag(name = "认证")
+@RestController
+@RequestMapping("/oauth")
+public class AuthController {
+
+    @Resource
+    private TokenEndpoint tokenEndpoint;
+    @Resource
+    private RedisHelper redisHelper;
+    @Resource
+    private SysUserApiExp sysUserApi;
+
+    @Operation(summary = "获取token", description = "OAuth2生成jwt")
+    @Parameters({
+            @Parameter(name = "grant_type", in = ParameterIn.QUERY, example = "password",
+                    description = "授权模式 authorization_code（授权码模式）、" +
+                            "password（密码模式）、" +
+                            "client_credentials（客户端模式）、" +
+                            "implicit（简化模式）、" +
+                            "refresh_token（刷新access_token）", required = true),
+            @Parameter(name = "client_id", in = ParameterIn.QUERY, example = "client-app", description = "Oauth2客户端ID", required = true),
+            @Parameter(name = "client_secret", in = ParameterIn.QUERY, example = "123456", description = "Oauth2客户端秘钥", required = true),
+            @Parameter(name = "refresh_token", in = ParameterIn.QUERY, description = "刷新token"),
+            @Parameter(name = "username", in = ParameterIn.QUERY, example = "admin", description = "登录用户名"),
+            @Parameter(name = "password", in = ParameterIn.QUERY, example = "123456", description = "登录密码")
+    })
+    @PostMapping("/token")
+    @SneakyThrows(HttpRequestMethodNotSupportedException.class)
+    public AuthToken postAccessToken(@Parameter(hidden = true) Principal principal,
+                                     @Parameter(hidden = true) @RequestParam Map<String, String> parameters) {
+        OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
+        return AuthToken.builder()
+                .accessToken(Objects.requireNonNull(oAuth2AccessToken).getValue())
+                .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
+                .expiresIn(oAuth2AccessToken.getExpiresIn())
+                .build();
+    }
+
+    @Operation(summary = "获取当前登录用户")
+    @GetMapping("/user")
+    public SysUserInfo getCurrentUser(HttpServletRequest request) {
+        String payload = request.getHeader(AuthEnum.JWT_PAYLOAD_KEY.value());
+        Integer userId = Integer.parseInt(
+                (String) JsonUtil.findByKey(payload, AuthEnum.JWT_USER_ID_KEY.value()));
+        return sysUserApi.getUserById(userId);
+    }
+
+    @Operation(summary = "注销", description = "（注销、登出、修改密码后）将token加入时效黑名单")
+    @DeleteMapping("/logout")
+    public void logout(HttpServletRequest request) {
+        long now = System.currentTimeMillis() / 1000;
+        String payload = request.getHeader(AuthEnum.JWT_PAYLOAD_KEY.value());
+        // JWT唯一标识
+        String jti = (String) JsonUtil.findByKey(payload, "jti");
+        // JWT过期时间戳
+        long exp = Long.parseLong((String) (JsonUtil.findByKey(payload, "exp")));
+
+        // 判断token是否过期，如果未过期，则将token加入黑名单，并设置redis过期时间
+        if (exp > now) {
+            redisHelper.set(AuthEnum.TOKEN_BLACKLIST_PREFIX.value() + jti,
+                    null, (exp - now), TimeUnit.SECONDS);
+        }
+    }
+}
