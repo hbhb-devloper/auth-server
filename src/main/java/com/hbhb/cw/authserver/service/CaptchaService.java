@@ -2,11 +2,11 @@ package com.hbhb.cw.authserver.service;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 
-import com.hbhb.common.constant.LoginConstant;
+import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.cw.authserver.bean.Captcha;
 import com.hbhb.cw.authserver.enums.CaptchaErrorCode;
 import com.hbhb.cw.authserver.exception.CaptchaException;
-import com.hbhb.cw.authserver.redis.RedisHelper;
+import com.hbhb.redis.component.RedisHelper;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -42,13 +42,13 @@ public class CaptchaService {
         Captcha captcha = new Captcha();
         // 生成key
         String captchaKey = UUID.randomUUID().toString().replaceAll("-", "");
-        String verifyKey = LoginConstant.CAPTCHA_CODE_KEY.value() + captchaKey;
+        String verifyKey = AuthConstant.CAPTCHA_CODE_KEY.value() + captchaKey;
         captcha.setKey(captchaKey);
 
         // 生成随机字串
         String verifyCode = defaultKaptcha.createText();
         redisHelper.set(verifyKey, verifyCode,
-                Long.parseLong(LoginConstant.CAPTCHA_EXPIRATION.value()), TimeUnit.MINUTES);
+                Long.parseLong(AuthConstant.CAPTCHA_EXPIRATION.value()), TimeUnit.MINUTES);
 
         // 生成图片
         try (ByteArrayOutputStream stream = new ByteArrayOutputStream()) {
@@ -71,7 +71,7 @@ public class CaptchaService {
         if (captcha == null) {
             throw new CaptchaException(CaptchaErrorCode.CAPTCHA_MISSING);
         }
-        String verifyKey = LoginConstant.CAPTCHA_CODE_KEY.value() + captchaKey;
+        String verifyKey = AuthConstant.CAPTCHA_CODE_KEY.value() + captchaKey;
         String captchaRedis = redisHelper.get(verifyKey);
         if (StringUtils.isEmpty(captchaRedis)) {
             throw new CaptchaException(CaptchaErrorCode.CAPTCHA_EXPIRED);

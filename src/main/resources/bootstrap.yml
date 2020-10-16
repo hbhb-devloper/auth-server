@@ -9,8 +9,8 @@ spring:
     name: @project.artifactId@
   cloud:
     consul:
-      host: consul.yeexun.com.cn
-#      host: ${host.docker0-ip}
+#      host: consul.yeexun.com.cn
+      host: ${host.docker0-ip}
       discovery:
         prefer-ip-address: true
         instance-id: ${spring.application.name}-${server.port}-${spring.cloud.client.ip-address}
@@ -51,8 +51,8 @@ host:
   # docker0的ip地址
   docker0-ip: 172.17.0.1
   # 线上环境映射的端口
-#  map-port: 10009
-  map-port: 10059
+  map-port: 10011
+#  map-port: 10059
 
 # 指定服务提供方实例地址（为空则不指定）
 feign-url:
@@ -61,3 +61,4 @@ feign-url:
 # 服务提供方实例名称
 provider:
   system-center: system-center-@env@
+

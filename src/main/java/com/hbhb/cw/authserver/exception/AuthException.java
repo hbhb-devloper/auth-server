@@ -1,7 +1,7 @@
 package com.hbhb.cw.authserver.exception;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.hbhb.cw.authserver.exception.tool.AuthExceptionSerializer;
+import com.hbhb.cw.authserver.component.AuthExceptionSerializer;
 
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 

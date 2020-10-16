@@ -1,7 +1,7 @@
 package com.hbhb.cw.authserver.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hbhb.cw.authserver.enums.AuthEnum;
+import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.cw.systemcenter.model.SysUser;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -38,7 +38,7 @@ public class LoginUser implements UserDetails {
     public LoginUser(SysUser user, String clientId, Collection<SimpleGrantedAuthority> authorities) {
         this.setId(user.getId());
         this.setUsername(user.getUserName());
-        this.setPassword(AuthEnum.BCRYPT.value() + user.getPwd());
+        this.setPassword(AuthConstant.BCRYPT.value() + user.getPwd());
         this.setEnabled(user.getState() == 1);
         this.setClientId(clientId);
         this.authorities = authorities;

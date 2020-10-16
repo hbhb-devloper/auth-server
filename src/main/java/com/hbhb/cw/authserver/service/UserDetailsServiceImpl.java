@@ -1,7 +1,7 @@
 package com.hbhb.cw.authserver.service;
 
+import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.cw.authserver.bean.LoginUser;
-import com.hbhb.cw.authserver.enums.AuthEnum;
 import com.hbhb.cw.authserver.enums.AuthErrorCode;
 import com.hbhb.cw.authserver.rpc.SysUserApiExp;
 import com.hbhb.cw.systemcenter.model.SysUser;
@@ -42,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String clientId = request.getParameter(AuthEnum.JWT_CLIENT_ID_KEY.value());
+        String clientId = request.getParameter(AuthConstant.JWT_CLIENT_ID_KEY.value());
         SysUser user = sysUserApi.getUserByName(username);
         if (StringUtils.isEmpty(user)) {
             throw new UsernameNotFoundException(AuthErrorCode.USER_NOT_FOUND.getMessage());

@@ -1,8 +1,8 @@
 package com.hbhb.cw.authserver.config;
 
-import com.hbhb.cw.authserver.enums.AuthEnum;
+import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.cw.authserver.bean.LoginUser;
-import com.hbhb.cw.authserver.exception.tool.AuthWebResponseExceptionTranslator;
+import com.hbhb.cw.authserver.component.AuthWebResponseExceptionTranslator;
 import com.hbhb.cw.authserver.service.JdbcClientDetailsServiceImpl;
 import com.hbhb.cw.authserver.service.UserDetailsServiceImpl;
 
@@ -58,8 +58,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) {
         // 从数据库中获取client信息
         JdbcClientDetailsServiceImpl jdbcClientDetailsService = new JdbcClientDetailsServiceImpl(dataSource);
-        jdbcClientDetailsService.setFindClientDetailsSql(AuthEnum.FIND_CLIENT_DETAILS_SQL.value());
-        jdbcClientDetailsService.setSelectClientDetailsSql(AuthEnum.SELECT_CLIENT_DETAILS_SQL.value());
+        jdbcClientDetailsService.setFindClientDetailsSql(AuthConstant.FIND_CLIENT_DETAILS_SQL.value());
+        jdbcClientDetailsService.setSelectClientDetailsSql(AuthConstant.SELECT_CLIENT_DETAILS_SQL.value());
         clients.withClientDetails(jdbcClientDetailsService);
     }
 
@@ -124,8 +124,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return (accessToken, authentication) -> {
             Map<String, Object> map = new HashMap<>(2);
             LoginUser user = (LoginUser) authentication.getUserAuthentication().getPrincipal();
-            map.put(AuthEnum.JWT_USER_ID_KEY.value(), user.getId());
-            map.put(AuthEnum.JWT_CLIENT_ID_KEY.value(), user.getClientId());
+            map.put(AuthConstant.JWT_USER_ID_KEY.value(), user.getId());
+            map.put(AuthConstant.JWT_CLIENT_ID_KEY.value(), user.getClientId());
             ((DefaultOAuth2AccessToken) accessToken).setAdditionalInformation(map);
             return accessToken;
         };

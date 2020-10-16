@@ -1,9 +1,9 @@
-package com.hbhb.cw.authserver.exception.tool;
+package com.hbhb.cw.authserver.component;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.hbhb.common.util.DateUtil;
+import com.hbhb.core.utils.DateUtil;
 import com.hbhb.cw.authserver.exception.AuthException;
 
 import lombok.SneakyThrows;

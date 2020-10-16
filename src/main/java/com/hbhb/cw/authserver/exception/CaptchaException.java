@@ -1,8 +1,8 @@
 package com.hbhb.cw.authserver.exception;
 
-import com.hbhb.common.exception.BusinessException;
+import com.hbhb.core.bean.MessageConvert;
 import com.hbhb.cw.authserver.enums.CaptchaErrorCode;
-import com.hbhb.cw.authserver.util.MessageUtil;
+import com.hbhb.web.exception.BusinessException;
 
 import lombok.Getter;
 
@@ -17,7 +17,7 @@ public class CaptchaException extends BusinessException {
     private final String code;
 
     public CaptchaException(CaptchaErrorCode errorCode) {
-        super(errorCode.getCode(), MessageUtil.convert(errorCode.getMessage()));
+        super(errorCode.getCode(), MessageConvert.convert(errorCode.getMessage()));
         this.code = errorCode.getCode();
     }
 }

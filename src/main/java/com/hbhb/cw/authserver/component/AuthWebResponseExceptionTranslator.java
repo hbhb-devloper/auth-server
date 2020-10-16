@@ -1,7 +1,7 @@
-package com.hbhb.cw.authserver.exception.tool;
+package com.hbhb.cw.authserver.component;
 
-import com.hbhb.cw.authserver.exception.AuthException;
 import com.hbhb.cw.authserver.enums.AuthErrorCode;
+import com.hbhb.cw.authserver.exception.AuthException;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

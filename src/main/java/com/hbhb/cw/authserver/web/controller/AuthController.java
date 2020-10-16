@@ -1,12 +1,11 @@
 package com.hbhb.cw.authserver.web.controller;
 
-import com.hbhb.common.util.JsonUtil;
+import com.hbhb.core.constants.AuthConstant;
+import com.hbhb.core.utils.JsonUtil;
 import com.hbhb.cw.authserver.bean.AuthToken;
-import com.hbhb.cw.authserver.enums.AuthEnum;
-import com.hbhb.cw.authserver.redis.RedisHelper;
 import com.hbhb.cw.authserver.rpc.SysUserApiExp;
-import com.hbhb.cw.systemcenter.model.SysUser;
 import com.hbhb.cw.systemcenter.vo.SysUserInfo;
+import com.hbhb.redis.component.RedisHelper;
 
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
@@ -78,9 +77,9 @@ public class AuthController {
     @Operation(summary = "获取当前登录用户")
     @GetMapping("/user")
     public SysUserInfo getCurrentUser(HttpServletRequest request) {
-        String payload = request.getHeader(AuthEnum.JWT_PAYLOAD_KEY.value());
+        String payload = request.getHeader(AuthConstant.JWT_PAYLOAD_KEY.value());
         Integer userId = Integer.parseInt(
-                (String) JsonUtil.findByKey(payload, AuthEnum.JWT_USER_ID_KEY.value()));
+                (String) JsonUtil.findByKey(payload, AuthConstant.JWT_USER_ID_KEY.value()));
         return sysUserApi.getUserById(userId);
     }
 
@@ -88,7 +87,7 @@ public class AuthController {
     @DeleteMapping("/logout")
     public void logout(HttpServletRequest request) {
         long now = System.currentTimeMillis() / 1000;
-        String payload = request.getHeader(AuthEnum.JWT_PAYLOAD_KEY.value());
+        String payload = request.getHeader(AuthConstant.JWT_PAYLOAD_KEY.value());
         // JWT唯一标识
         String jti = (String) JsonUtil.findByKey(payload, "jti");
         // JWT过期时间戳
@@ -96,7 +95,7 @@ public class AuthController {
 
         // 判断token是否过期，如果未过期，则将token加入黑名单，并设置redis过期时间
         if (exp > now) {
-            redisHelper.set(AuthEnum.TOKEN_BLACKLIST_PREFIX.value() + jti,
+            redisHelper.set(AuthConstant.TOKEN_BLACKLIST_PREFIX.value() + jti,
                     null, (exp - now), TimeUnit.SECONDS);
         }
     }
