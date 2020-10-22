@@ -4,6 +4,9 @@ server:
   compression:
     enabled: true
 
+springdoc:
+  server-url: https://gateway.yeexun.com.cn/auth
+
 spring:
   profiles:
     active: @env@
