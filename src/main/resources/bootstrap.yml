@@ -5,6 +5,8 @@ server:
     enabled: true
 
 spring:
+  profiles:
+    active: @env@
   application:
     name: @project.artifactId@
   cloud:
