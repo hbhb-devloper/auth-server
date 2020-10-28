@@ -6,6 +6,7 @@ import com.hbhb.cw.authserver.bean.AuthToken;
 import com.hbhb.cw.authserver.rpc.SysUserApiExp;
 import com.hbhb.cw.systemcenter.vo.SysUserInfo;
 import com.hbhb.redis.component.RedisHelper;
+import com.hbhb.web.annotation.UserId;
 
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
@@ -76,10 +77,7 @@ public class AuthController {
 
     @Operation(summary = "获取当前登录用户")
     @GetMapping("/user")
-    public SysUserInfo getCurrentUser(HttpServletRequest request) {
-        String payload = request.getHeader(AuthConstant.JWT_PAYLOAD_KEY.value());
-        Integer userId = Integer.parseInt(
-                (String) JsonUtil.findByKey(payload, AuthConstant.JWT_USER_ID_KEY.value()));
+    public SysUserInfo getCurrentUser(@Parameter(hidden = true) @UserId Integer userId) {
         return sysUserApi.getUserById(userId);
     }
 
