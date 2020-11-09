@@ -9,14 +9,13 @@ import lombok.Getter;
 @Getter
 public enum CaptchaErrorCode {
 
-    CAPTCHA_GENERATE_ERROR("90006", "captcha.generate.error"),
-    CAPTCHA_MISSING("90007", "captcha.missing"),
-    CAPTCHA_EXPIRED("90008", "captcha.expired"),
-    CAPTCHA_MISMATCH("90009", "captcha.mismatch"),
+    CAPTCHA_GENERATE_ERROR("A0100", "captcha.generate.error"),
+    CAPTCHA_MISSING("A0101", "captcha.missing"),
+    CAPTCHA_EXPIRED("A0102", "captcha.expired"),
+    CAPTCHA_MISMATCH("A0103", "captcha.mismatch"),
     ;
 
     private final String code;
-
     private final String message;
 
     CaptchaErrorCode(String code, String message) {
