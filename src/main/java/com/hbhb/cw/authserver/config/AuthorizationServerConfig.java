@@ -2,7 +2,6 @@ package com.hbhb.cw.authserver.config;
 
 import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.cw.authserver.bean.LoginUser;
-import com.hbhb.cw.authserver.component.AuthWebResponseExceptionTranslator;
 import com.hbhb.cw.authserver.service.JdbcClientDetailsServiceImpl;
 import com.hbhb.cw.authserver.service.UserDetailsServiceImpl;
 
@@ -38,7 +37,7 @@ import lombok.SneakyThrows;
  */
 @Configuration
 @EnableAuthorizationServer
-@SuppressWarnings(value = {"unchecked"})
+//@SuppressWarnings(value = {"unchecked"})
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     @Resource
@@ -47,8 +46,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private AuthenticationManager authenticationManager;
     @Resource
     private UserDetailsServiceImpl userDetailsService;
-    @Resource
-    private AuthWebResponseExceptionTranslator authWebResponseExceptionTranslator;
+//    @Resource
+//    private AuthWebResponseExceptionTranslator authWebResponseExceptionTranslator;
 
     /**
      * 配置客户端详情
@@ -83,7 +82,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 //      1 重复使用：access token过期刷新时， refresh token过期时间未改变，仍以初次生成的时间为准
                 //      2 非重复使用：access token过期刷新时， refresh token过期时间延续，在refresh token有效期内刷新便永不失效达到无需再次登录的目的
                 .reuseRefreshTokens(false)
-                .exceptionTranslator(authWebResponseExceptionTranslator)
+//                .exceptionTranslator(authWebResponseExceptionTranslator)
         ;
     }
 
