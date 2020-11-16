@@ -24,7 +24,7 @@
 //    @SneakyThrows
 //    public void serialize(AuthException e, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) {
 //        jsonGenerator.writeStartObject();
-//        jsonGenerator.writeObjectField("code",e.getOAuth2ErrorCode());
+//        jsonGenerator.writeObjectField("code",e.getCode());
 //        jsonGenerator.writeStringField("message", e.getMessage());
 //        jsonGenerator.writeStringField("data", null);
 //        jsonGenerator.writeStringField("timestamp", DateUtil.getCurrentDate());

@@ -31,7 +31,7 @@
 //
 //    @Override
 //    @SneakyThrows
-//    public ResponseEntity<OAuth2Exception> translate(Exception e) {
+//    public ResponseEntity<AuthException> translate(Exception e) {
 //        Throwable[] causeChain = throwableAnalyzer.determineCauseChain(e);
 //        Exception exception = (InvalidGrantException) throwableAnalyzer.getFirstThrowableOfType(
 //                InvalidGrantException.class, causeChain);
@@ -42,7 +42,7 @@
 //    }
 //
 //
-//    private ResponseEntity<OAuth2Exception> handleAuthException(OAuth2Exception e) {
+//    private ResponseEntity<AuthException> handleAuthException(OAuth2Exception e) {
 //        int status = e.getHttpErrorCode();
 //        HttpHeaders headers = new HttpHeaders();
 //        headers.set(HttpHeaders.CACHE_CONTROL, "no-store");
@@ -53,9 +53,9 @@
 //        }
 //
 //        // 客户端异常直接返回客户端，不然无法解析
-//        if (e instanceof ClientAuthenticationException) {
-//            return new ResponseEntity<>(e, headers, HttpStatus.valueOf(status));
-//        }
+////        if (e instanceof ClientAuthenticationException) {
+////            return new ResponseEntity<>(e, headers, HttpStatus.valueOf(status));
+////        }
 //        return new ResponseEntity<>(new AuthException(e.getMessage(), e.getOAuth2ErrorCode()), headers,
 //                HttpStatus.valueOf(status));
 //    }

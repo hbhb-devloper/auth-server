@@ -74,11 +74,15 @@ public class CaptchaService {
         String verifyKey = AuthConstant.CAPTCHA_CODE_KEY.value() + captchaKey;
         String captchaRedis = redisHelper.get(verifyKey);
         if (StringUtils.isEmpty(captchaRedis)) {
+            redisHelper.delete(verifyKey);
             throw new CaptchaException(CaptchaErrorCode.CAPTCHA_EXPIRED);
         }
         if (!captcha.equalsIgnoreCase(captchaRedis)) {
+            redisHelper.delete(verifyKey);
             throw new CaptchaException(CaptchaErrorCode.CAPTCHA_MISMATCH);
         }
+        // 检验成功后，销毁验证码
+        redisHelper.delete(verifyKey);
         return true;
     }
 }

@@ -26,11 +26,11 @@ public class KaptchaConfig {
         // 字体类型
         properties.setProperty("kaptcha.textproducer.font.names", "Arial");
         // 字体大小
-        properties.setProperty("kaptcha.textproducer.font.size", "30");
+        properties.setProperty("kaptcha.textproducer.font.size", "25");
         // 验证码设置
-        properties.setProperty("kaptcha.textproducer.char.length", "4");
-        properties.setProperty("kaptcha.textproducer.char.space", "5");
-        properties.setProperty("kaptcha.textproducer.char.string", "123456789ABCDEFGHJKLMNPQRSTUVWXYZ");
+        properties.setProperty("kaptcha.textproducer.char.length", "6");
+        properties.setProperty("kaptcha.textproducer.char.space", "2");
+        properties.setProperty("kaptcha.textproducer.char.string", "0123456789ABCDEFGHJKLMNPQRSTUVWXYZ");
         // 燥点
         properties.setProperty("kaptcha.noise.color", "35,37,38");
         Config config = new Config(properties);

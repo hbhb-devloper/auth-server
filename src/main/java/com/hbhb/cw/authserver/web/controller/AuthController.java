@@ -3,12 +3,15 @@ package com.hbhb.cw.authserver.web.controller;
 import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.core.utils.JsonUtil;
 import com.hbhb.cw.authserver.bean.AuthToken;
+import com.hbhb.cw.authserver.enums.AuthErrorCode;
+import com.hbhb.cw.authserver.exception.AuthException;
 import com.hbhb.cw.authserver.rpc.SysUserApiExp;
 import com.hbhb.cw.systemcenter.vo.SysUserInfo;
 import com.hbhb.redis.component.RedisHelper;
 import com.hbhb.web.annotation.UserId;
 
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,7 +70,12 @@ public class AuthController {
     @SneakyThrows(HttpRequestMethodNotSupportedException.class)
     public AuthToken postAccessToken(@Parameter(hidden = true) Principal principal,
                                      @Parameter(hidden = true) @RequestParam Map<String, String> parameters) {
-        OAuth2AccessToken oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
+        OAuth2AccessToken oAuth2AccessToken;
+        try {
+            oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
+        } catch (OAuth2Exception e) {
+            throw new AuthException(AuthErrorCode.USERNAME_OR_PASSWORD_ERROR);
+        }
         return AuthToken.builder()
                 .accessToken(Objects.requireNonNull(oAuth2AccessToken).getValue())
                 .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
