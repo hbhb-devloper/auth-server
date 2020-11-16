@@ -8,8 +8,8 @@ spring:
     name: @project.artifactId@
   cloud:
     consul:
-      host: consul.yeexun.com.cn
-      #      host: ${host.docker0-ip}
+#      host: consul.yeexun.com.cn
+      host: ${host.docker0-ip}
       discovery:
         #        prefer-ip-address: true
         instance-id: ${spring.application.name}-${server.port}-${spring.cloud.client.ip-address}
