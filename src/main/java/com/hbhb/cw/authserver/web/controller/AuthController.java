@@ -1,6 +1,7 @@
 package com.hbhb.cw.authserver.web.controller;
 
 import com.hbhb.core.constants.AuthConstant;
+import com.hbhb.core.utils.AESCryptUtil;
 import com.hbhb.core.utils.JsonUtil;
 import com.hbhb.cw.authserver.bean.AuthToken;
 import com.hbhb.cw.authserver.enums.AuthErrorCode;
@@ -60,17 +61,20 @@ public class AuthController {
                             "client_credentials（客户端模式）、" +
                             "implicit（简化模式）、" +
                             "refresh_token（刷新access_token）", required = true),
-            @Parameter(name = "client_id", in = ParameterIn.QUERY, example = "client-app", description = "Oauth2客户端ID", required = true),
+            @Parameter(name = "client_id", in = ParameterIn.QUERY, example = "zhcw", description = "Oauth2客户端ID", required = true),
             @Parameter(name = "client_secret", in = ParameterIn.QUERY, example = "123456", description = "Oauth2客户端秘钥", required = true),
             @Parameter(name = "refresh_token", in = ParameterIn.QUERY, description = "刷新token"),
             @Parameter(name = "username", in = ParameterIn.QUERY, example = "admin", description = "登录用户名"),
-            @Parameter(name = "password", in = ParameterIn.QUERY, example = "123456", description = "登录密码")
+            @Parameter(name = "password", in = ParameterIn.QUERY,
+                    example = "YTbFKON/FlYTuYkbGnxo4kZvEDll1ZcvKKXl0H5cCzU=", description = "登录密码")
     })
     @PostMapping("/token")
     @SneakyThrows(HttpRequestMethodNotSupportedException.class)
     public AuthToken postAccessToken(@Parameter(hidden = true) Principal principal,
                                      @Parameter(hidden = true) @RequestParam Map<String, String> parameters) {
         OAuth2AccessToken oAuth2AccessToken;
+        String password = parameters.get("password");
+        parameters.put("password", AESCryptUtil.decrypt(password));
         try {
             oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
         } catch (OAuth2Exception e) {
