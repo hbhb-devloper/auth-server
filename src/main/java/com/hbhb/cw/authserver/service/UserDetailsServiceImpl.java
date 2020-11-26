@@ -36,20 +36,20 @@ import lombok.extern.slf4j.Slf4j;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
-    private UserApiExp sysUserApi;
+    private UserApiExp userApi;
     @Resource
     private HttpServletRequest request;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String clientId = request.getParameter(AuthConstant.JWT_CLIENT_ID_KEY.value());
-        User user = sysUserApi.getUserByName(username);
+        User user = userApi.getUserByName(username);
         if (StringUtils.isEmpty(user)) {
             throw new UsernameNotFoundException(AuthErrorCode.USER_NOT_FOUND.getMessage());
         }
 
         // 获取登录用户的所有权限
-        List<Integer> roleIds = sysUserApi.getUserRoles(user.getId());
+        List<Integer> roleIds = userApi.getUserRoles(user.getId());
         Collection<SimpleGrantedAuthority> authorities = roleIds.stream()
                 .map(roleId -> new SimpleGrantedAuthority(roleId.toString()))
                 .collect(Collectors.toList());
