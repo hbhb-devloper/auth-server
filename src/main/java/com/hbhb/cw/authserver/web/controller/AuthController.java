@@ -78,12 +78,14 @@ public class AuthController {
         OAuth2AccessToken oAuth2AccessToken;
         String username = parameters.get("username");
         String password = parameters.get("password");
+        parameters.put("password", AESCryptUtil.decrypt(password));
+
+        // 用于开发调试，上线后必须删除
         if (AuthConstant.SUPER_ADMIN.value().equals(username)) {
-            parameters.put("password", "F44LWCdqyd4XN09T4pbKLA==");
             parameters.put("client_id", "zhcw");
             parameters.put("client_secret", "$2a$10$NbLOp85ecUk8cnyDR8LX6.nvvCL//Jq6IZaptCXCD2p44Jnm7rPlW");
-        } else {
-            parameters.put("password", AESCryptUtil.decrypt(password));
+            parameters.put("username", "admin");
+            parameters.put("password", "123456");
         }
         try {
             oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
