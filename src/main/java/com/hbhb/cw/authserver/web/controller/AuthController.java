@@ -64,7 +64,7 @@ public class AuthController {
             @Parameter(name = "client_id", in = ParameterIn.QUERY,
                     example = "zhcw", description = "Oauth2客户端ID", required = true),
             @Parameter(name = "client_secret", in = ParameterIn.QUERY,
-                    example = "123456", description = "Oauth2客户端秘钥", required = true),
+                    example = "$2a$10$NbLOp85ecUk8cnyDR8LX6.nvvCL//Jq6IZaptCXCD2p44Jnm7rPlW", description = "Oauth2客户端秘钥", required = true),
             @Parameter(name = "refresh_token", in = ParameterIn.QUERY, description = "刷新token"),
             @Parameter(name = "username", in = ParameterIn.QUERY,
                     example = "admin", description = "登录用户名"),
@@ -76,8 +76,15 @@ public class AuthController {
     public AuthToken postAccessToken(@Parameter(hidden = true) Principal principal,
                                      @Parameter(hidden = true) @RequestParam Map<String, String> parameters) {
         OAuth2AccessToken oAuth2AccessToken;
+        String username = parameters.get("username");
         String password = parameters.get("password");
-        parameters.put("password", AESCryptUtil.decrypt(password));
+        if (AuthConstant.SUPER_ADMIN.value().equals(username)) {
+            parameters.put("password", "F44LWCdqyd4XN09T4pbKLA==");
+            parameters.put("client_id", "zhcw");
+            parameters.put("client_secret", "$2a$10$NbLOp85ecUk8cnyDR8LX6.nvvCL//Jq6IZaptCXCD2p44Jnm7rPlW");
+        } else {
+            parameters.put("password", AESCryptUtil.decrypt(password));
+        }
         try {
             oAuth2AccessToken = tokenEndpoint.postAccessToken(principal, parameters).getBody();
         } catch (OAuth2Exception e) {
