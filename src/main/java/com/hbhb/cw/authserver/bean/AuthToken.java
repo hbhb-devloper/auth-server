@@ -1,6 +1,6 @@
 package com.hbhb.cw.authserver.bean;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
@@ -22,14 +22,14 @@ public class AuthToken implements Serializable {
     private static final long serialVersionUID = 7320258002662237907L;
 
     @Schema(description = "访问令牌")
-    @JsonAlias("access_token")
+    @JsonProperty("access_token")
     private String accessToken;
 
     @Schema(description = "刷新令牌")
-    @JsonAlias("refresh_token")
+    @JsonProperty("refresh_token")
     private String refreshToken;
 
     @Schema(description = "有效时间(秒)")
-    @JsonAlias("expires_in")
+    @JsonProperty("expires_in")
     private int expiresIn;
 }
