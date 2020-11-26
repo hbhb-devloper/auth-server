@@ -77,9 +77,9 @@ public class AuthController {
             throw new AuthException(AuthErrorCode.USERNAME_OR_PASSWORD_ERROR);
         }
         return AuthToken.builder()
-                .access_token(Objects.requireNonNull(oAuth2AccessToken).getValue())
-                .refresh_token(oAuth2AccessToken.getRefreshToken().getValue())
-                .expires_in(oAuth2AccessToken.getExpiresIn())
+                .accessToken(Objects.requireNonNull(oAuth2AccessToken).getValue())
+                .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
+                .expiresIn(oAuth2AccessToken.getExpiresIn())
                 .build();
     }
 

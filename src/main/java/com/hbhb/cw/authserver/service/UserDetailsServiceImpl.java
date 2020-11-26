@@ -44,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String clientId = request.getParameter(AuthConstant.JWT_CLIENT_ID_KEY.value());
         User user = userApi.getUserByName(username);
-        if (StringUtils.isEmpty(user)) {
+        if (StringUtils.isEmpty(user) || user.getId() == null) {
             throw new UsernameNotFoundException(AuthErrorCode.USER_NOT_FOUND.getMessage());
         }
 
