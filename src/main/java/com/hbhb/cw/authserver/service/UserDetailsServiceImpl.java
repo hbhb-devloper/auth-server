@@ -3,8 +3,8 @@ package com.hbhb.cw.authserver.service;
 import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.cw.authserver.bean.LoginUser;
 import com.hbhb.cw.authserver.enums.AuthErrorCode;
-import com.hbhb.cw.authserver.rpc.SysUserApiExp;
-import com.hbhb.cw.systemcenter.model.SysUser;
+import com.hbhb.cw.authserver.rpc.UserApiExp;
+import com.hbhb.cw.systemcenter.model.User;
 
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -36,14 +36,14 @@ import lombok.extern.slf4j.Slf4j;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
-    private SysUserApiExp sysUserApi;
+    private UserApiExp sysUserApi;
     @Resource
     private HttpServletRequest request;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String clientId = request.getParameter(AuthConstant.JWT_CLIENT_ID_KEY.value());
-        SysUser user = sysUserApi.getUserByName(username);
+        User user = sysUserApi.getUserByName(username);
         if (StringUtils.isEmpty(user)) {
             throw new UsernameNotFoundException(AuthErrorCode.USER_NOT_FOUND.getMessage());
         }

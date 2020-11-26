@@ -2,7 +2,7 @@ package com.hbhb.cw.authserver.bean;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hbhb.core.constants.AuthConstant;
-import com.hbhb.cw.systemcenter.model.SysUser;
+import com.hbhb.cw.systemcenter.model.User;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,7 +35,7 @@ public class LoginUser implements UserDetails {
     @Schema(description = "权限集合")
     private Collection<SimpleGrantedAuthority> authorities;
 
-    public LoginUser(SysUser user, String clientId, Collection<SimpleGrantedAuthority> authorities) {
+    public LoginUser(User user, String clientId, Collection<SimpleGrantedAuthority> authorities) {
         this.setId(user.getId());
         this.setUsername(user.getUserName());
         this.setPassword(AuthConstant.BCRYPT.value() + user.getPwd());

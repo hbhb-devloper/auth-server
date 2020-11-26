@@ -20,9 +20,9 @@ public class AuthToken implements Serializable {
     private static final long serialVersionUID = 7320258002662237907L;
 
     @Schema(description = "访问令牌")
-    private String accessToken;
+    private String access_token;
     @Schema(description = "刷新令牌")
-    private String refreshToken;
+    private String refresh_token;
     @Schema(description = "有效时间(秒)")
-    private int expiresIn;
+    private int expires_in;
 }

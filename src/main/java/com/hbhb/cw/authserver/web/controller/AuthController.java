@@ -5,8 +5,8 @@ import com.hbhb.core.utils.JsonUtil;
 import com.hbhb.cw.authserver.bean.AuthToken;
 import com.hbhb.cw.authserver.enums.AuthErrorCode;
 import com.hbhb.cw.authserver.exception.AuthException;
-import com.hbhb.cw.authserver.rpc.SysUserApiExp;
-import com.hbhb.cw.systemcenter.vo.SysUserInfo;
+import com.hbhb.cw.authserver.rpc.UserApiExp;
+import com.hbhb.cw.systemcenter.vo.UserInfo;
 import com.hbhb.redis.component.RedisHelper;
 import com.hbhb.web.annotation.UserId;
 
@@ -50,7 +50,7 @@ public class AuthController {
     @Resource
     private RedisHelper redisHelper;
     @Resource
-    private SysUserApiExp sysUserApi;
+    private UserApiExp userApi;
 
     @Operation(summary = "获取token", description = "OAuth2生成jwt")
     @Parameters({
@@ -77,16 +77,16 @@ public class AuthController {
             throw new AuthException(AuthErrorCode.USERNAME_OR_PASSWORD_ERROR);
         }
         return AuthToken.builder()
-                .accessToken(Objects.requireNonNull(oAuth2AccessToken).getValue())
-                .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
-                .expiresIn(oAuth2AccessToken.getExpiresIn())
+                .access_token(Objects.requireNonNull(oAuth2AccessToken).getValue())
+                .refresh_token(oAuth2AccessToken.getRefreshToken().getValue())
+                .expires_in(oAuth2AccessToken.getExpiresIn())
                 .build();
     }
 
     @Operation(summary = "获取当前登录用户")
     @GetMapping("/user")
-    public SysUserInfo getCurrentUser(@Parameter(hidden = true) @UserId Integer userId) {
-        return sysUserApi.getUserById(userId);
+    public UserInfo getCurrentUser(@Parameter(hidden = true) @UserId Integer userId) {
+        return userApi.getUserById(userId);
     }
 
     @Operation(summary = "注销", description = "（注销、登出、修改密码后）将token加入时效黑名单")

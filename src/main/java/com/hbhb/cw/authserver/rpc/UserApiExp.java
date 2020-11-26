@@ -1,6 +1,6 @@
 package com.hbhb.cw.authserver.rpc;
 
-import com.hbhb.cw.systemcenter.api.SysUserApi;
+import com.hbhb.cw.systemcenter.api.UserApi;
 
 import org.springframework.cloud.openfeign.FeignClient;
 
@@ -9,5 +9,5 @@ import org.springframework.cloud.openfeign.FeignClient;
  * @since 2020-09-18
  */
 @FeignClient(value = "${provider.system-center}", url = "${feign-url}", path = "user")
-public interface SysUserApiExp extends SysUserApi {
+public interface UserApiExp extends UserApi {
 }
