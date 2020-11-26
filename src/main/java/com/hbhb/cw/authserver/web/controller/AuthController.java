@@ -61,15 +61,11 @@ public class AuthController {
                             "client_credentials（客户端模式）、" +
                             "implicit（简化模式）、" +
                             "refresh_token（刷新access_token）", required = true),
-            @Parameter(name = "client_id", in = ParameterIn.QUERY,
-                    example = "zhcw", description = "Oauth2客户端ID", required = true),
-            @Parameter(name = "client_secret", in = ParameterIn.QUERY,
-                    example = "$2a$10$NbLOp85ecUk8cnyDR8LX6.nvvCL//Jq6IZaptCXCD2p44Jnm7rPlW", description = "Oauth2客户端秘钥", required = true),
+            @Parameter(name = "client_id", in = ParameterIn.QUERY, example = "zhcw", description = "Oauth2客户端ID", required = true),
+            @Parameter(name = "client_secret", in = ParameterIn.QUERY, example = "123456", description = "Oauth2客户端秘钥", required = true),
             @Parameter(name = "refresh_token", in = ParameterIn.QUERY, description = "刷新token"),
-            @Parameter(name = "username", in = ParameterIn.QUERY,
-                    example = "admin", description = "登录用户名"),
-            @Parameter(name = "password", in = ParameterIn.QUERY,
-                    example = "F44LWCdqyd4XN09T4pbKLA==", description = "登录密码")
+            @Parameter(name = "username", in = ParameterIn.QUERY, example = "admin", description = "登录用户名"),
+            @Parameter(name = "password", in = ParameterIn.QUERY, example = "F44LWCdqyd4XN09T4pbKLA==", description = "登录密码")
     })
     @PostMapping("/token")
     @SneakyThrows(HttpRequestMethodNotSupportedException.class)
@@ -82,8 +78,6 @@ public class AuthController {
 
         // 用于开发调试，上线后必须删除
         if (AuthConstant.SUPER_ADMIN.value().equals(username)) {
-            parameters.put("client_id", "zhcw");
-            parameters.put("client_secret", "$2a$10$NbLOp85ecUk8cnyDR8LX6.nvvCL//Jq6IZaptCXCD2p44Jnm7rPlW");
             parameters.put("username", "admin");
             parameters.put("password", "123456");
         }
