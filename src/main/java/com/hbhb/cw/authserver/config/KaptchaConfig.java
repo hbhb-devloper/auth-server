@@ -30,9 +30,10 @@ public class KaptchaConfig {
         // 验证码设置
         properties.setProperty("kaptcha.textproducer.char.length", "6");
         properties.setProperty("kaptcha.textproducer.char.space", "2");
-        properties.setProperty("kaptcha.textproducer.char.string", "0123456789ABCDEFGHJKLMNPQRSTUVWXYZ");
+        properties.setProperty("kaptcha.textproducer.char.string", "123456789ABCDEFGHJKLMNPQRSTUVWXYZ");
         // 燥点
-        properties.setProperty("kaptcha.noise.color", "35,37,38");
+//        properties.setProperty("kaptcha.noise.color", "35,37,38");
+        properties.setProperty("kaptcha.noise.impl", "com.google.code.kaptcha.impl.NoNoise");
         Config config = new Config(properties);
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;
