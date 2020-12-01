@@ -6,17 +6,13 @@ import com.hbhb.core.utils.JsonUtil;
 import com.hbhb.cw.authserver.bean.AuthToken;
 import com.hbhb.cw.authserver.enums.AuthErrorCode;
 import com.hbhb.cw.authserver.exception.AuthException;
-import com.hbhb.cw.authserver.rpc.UserApiExp;
-import com.hbhb.cw.systemcenter.vo.UserInfo;
 import com.hbhb.redis.component.RedisHelper;
-import com.hbhb.web.annotation.UserId;
 
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,8 +46,6 @@ public class AuthController {
     private TokenEndpoint tokenEndpoint;
     @Resource
     private RedisHelper redisHelper;
-    @Resource
-    private UserApiExp userApi;
 
     @Operation(summary = "获取token", description = "OAuth2生成jwt")
     @Parameters({
@@ -91,12 +85,6 @@ public class AuthController {
                 .refreshToken(oAuth2AccessToken.getRefreshToken().getValue())
                 .expiresIn(oAuth2AccessToken.getExpiresIn())
                 .build();
-    }
-
-    @Operation(summary = "获取当前登录用户")
-    @GetMapping("/user")
-    public UserInfo getCurrentUser(@Parameter(hidden = true) @UserId Integer userId) {
-        return userApi.getUserById(userId);
     }
 
     @Operation(summary = "注销", description = "（注销、登出、修改密码后）将token加入时效黑名单")

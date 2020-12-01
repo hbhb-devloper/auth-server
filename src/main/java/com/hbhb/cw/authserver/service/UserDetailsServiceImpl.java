@@ -4,7 +4,7 @@ import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.cw.authserver.bean.LoginUser;
 import com.hbhb.cw.authserver.enums.AuthErrorCode;
 import com.hbhb.cw.authserver.rpc.UserApiExp;
-import com.hbhb.cw.systemcenter.model.User;
+import com.hbhb.cw.systemcenter.vo.UserInfo;
 
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -43,12 +43,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         String clientId = request.getParameter(AuthConstant.JWT_CLIENT_ID_KEY.value());
-        User user = userApi.getUserByName(username);
+        UserInfo user = userApi.getUserInfoByName(username);
         if (StringUtils.isEmpty(user) || user.getId() == null) {
             throw new UsernameNotFoundException(AuthErrorCode.USER_NOT_FOUND.getMessage());
         }
 
-        // 获取登录用户的所有权限
+        // 获取登录用户的所有角色
         List<Integer> roleIds = userApi.getUserRoles(user.getId());
         Collection<SimpleGrantedAuthority> authorities = roleIds.stream()
                 .map(roleId -> new SimpleGrantedAuthority(roleId.toString()))
