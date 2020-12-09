@@ -3,13 +3,10 @@ package com.hbhb.cw.authserver.service;
 import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.cw.authserver.bean.LoginUser;
 import com.hbhb.cw.authserver.enums.AuthErrorCode;
+import com.hbhb.cw.authserver.exception.AuthException;
 import com.hbhb.cw.authserver.rpc.UserApiExp;
 import com.hbhb.cw.systemcenter.vo.UserInfo;
 
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.CredentialsExpiredException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -56,13 +53,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         LoginUser loginUser = new LoginUser(user, clientId, authorities);
         if (!loginUser.isEnabled()) {
-            throw new DisabledException(AuthErrorCode.USER_DISABLED.getMessage());
+            throw new AuthException(AuthErrorCode.USER_DISABLED);
         } else if (!loginUser.isAccountNonLocked()) {
-            throw new LockedException(AuthErrorCode.USER_LOCKED.getMessage());
+            throw new AuthException(AuthErrorCode.USER_LOCKED);
         } else if (!loginUser.isAccountNonExpired()) {
-            throw new AccountExpiredException(AuthErrorCode.USER_ACCOUNT_EXPIRED.getMessage());
+            throw new AuthException(AuthErrorCode.USER_ACCOUNT_EXPIRED);
         } else if (!loginUser.isCredentialsNonExpired()) {
-            throw new CredentialsExpiredException(AuthErrorCode.USER_CREDENTIALS_EXPIRED.getMessage());
+            throw new AuthException(AuthErrorCode.USER_CREDENTIALS_EXPIRED);
         }
         return loginUser;
     }
