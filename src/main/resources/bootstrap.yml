@@ -48,7 +48,7 @@ host:
 port:
   default: 10053
   dev: 10021
-  test: 10011
+  test: 10020
   prd: 10011
 
 # 指定服务提供方实例地址（为空则不指定）
@@ -97,14 +97,15 @@ spring:
   profiles: test
   cloud:
     consul:
-      host: ${host.docker0}
+      #      host: ${host.docker0}
+      host: consul.yeexun.com.cn
       discovery:
         instance-id: ${spring.application.name}-${port.test}-${spring.cloud.client.ip-address}
         service-name: ${spring.application.name}
         health-check-url: http://${host.docker0}:${port.test}/actuator/health
         # 测试环境使用代理ip
-        hostname: ${host.docker0}
-        port: ${port.test}
+        hostname: ${host.proxy}
+        port: 10011
 
 ################### 正式环境配置 ###################
 ---
