@@ -66,7 +66,7 @@ spring:
   cloud:
     consul:
       host: consul.yeexun.com.cn
-      #      host: 47.96.83.55
+#      host: 47.96.83.55
       discovery:
         #        prefer-ip-address: true
         instance-id: ${spring.application.name}-${server.port}-${spring.cloud.client.ip-address}
