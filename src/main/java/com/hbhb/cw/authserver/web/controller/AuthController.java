@@ -3,6 +3,7 @@ package com.hbhb.cw.authserver.web.controller;
 import com.hbhb.core.constants.AuthConstant;
 import com.hbhb.core.utils.AESCryptUtil;
 import com.hbhb.core.utils.JsonUtil;
+import com.hbhb.core.utils.UriUtil;
 import com.hbhb.cw.authserver.bean.AuthToken;
 import com.hbhb.cw.authserver.enums.AuthErrorCode;
 import com.hbhb.cw.authserver.exception.AuthException;
@@ -68,7 +69,7 @@ public class AuthController {
         OAuth2AccessToken oAuth2AccessToken;
         String username = parameters.get("username");
         String password = parameters.get("password");
-        parameters.put("password", AESCryptUtil.decrypt(password));
+        parameters.put("password", UriUtil.decode(AESCryptUtil.decrypt(password)));
 
         // 用于开发调试，上线后必须删除
         if (AuthConstant.SUPER_ADMIN.value().equals(username)) {
