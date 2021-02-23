@@ -117,8 +117,8 @@ public class AuthController {
     }
 
     @Operation(summary = "重置密码链接发送至邮箱", description = "用于验证用户输入邮箱准确性及推送修改密码连接至邮件")
-    @GetMapping("/forgot-password")
-    public void pushEmail(@Parameter(description = "邮箱地址") String email) {
+    @GetMapping("/forgot/password")
+    public String pushEmail(@Parameter(description = "邮箱地址") String email) {
         UserInfo userInfo = userApi.getUserInfoByEmail(email);
         if (("").equals(userInfo.getEmail()) || userInfo.getEmail() == null) {
             throw new AuthException(AuthErrorCode.EMAIL_INPUT_ERROR);
@@ -129,10 +129,11 @@ public class AuthController {
         // 推送邮件
         mailService.postMail(userInfo.getEmail(), userInfo.getNickName(), "重设您的财务管理系统密码",
                 "尊敬的:" + userInfo.getNickName() +
-                        "\n" + "您正在重置您的财务管理系统密码,重置密码地址为：" + "<a href=" + path + "key=" + encryptResult
+                        "\n" + "您正在重置您的财务管理系统密码,重置密码地址为：" + "<a href=" + path + "?" + "key=" + encryptResult
                         + " target='_blank'>点击我重新设置密码</a>"
                         + "<br/>tips:本邮件超过30分钟,链接将会失效，需要重新申请'找回密码 <a href=https://zhcw.yeexun.com.cn>"
                         + "</a>");
+        return path + "?" + "key=" + encryptResult;
     }
 
     @Operation(summary = "通过邮箱重置密码")
