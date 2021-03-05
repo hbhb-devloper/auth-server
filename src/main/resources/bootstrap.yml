@@ -104,7 +104,7 @@ spring:
         service-name: ${spring.application.name}
         health-check-url: http://${host.docker0}:${port.test}/actuator/health
         # 测试环境使用代理ip
-        hostname: ${host.docker0}
+        hostname: ${host.proxy}
         port: ${port.test-proxy}
 ################### 正式环境配置 ###################
 ---
