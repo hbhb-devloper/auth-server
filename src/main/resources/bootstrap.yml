@@ -92,6 +92,7 @@ spring:
         # 开发环境使用代理ip
         hostname: ${host.proxy}
         port: ${port.dev-proxy}
+
 ################### 测试环境配置 ###################
 ---
 spring:
