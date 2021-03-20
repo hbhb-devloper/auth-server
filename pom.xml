@@ -30,14 +30,20 @@
             <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.4.8</version>
+            <groupId>com.hbhb</groupId>
+            <artifactId>hbhb-redis</artifactId>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.hbhb</groupId>
             <artifactId>system-center-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.hbhb</groupId>
+            <artifactId>message-hub-api</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

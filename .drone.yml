@@ -17,7 +17,6 @@ steps:
       script_stop: false
       script:
         - find /data/maven/repository/com/hbhb -type d -name "*-api" | xargs rm -rf
-
   # maven打包
   - name: build
     image: maven:3-jdk-8
@@ -26,7 +25,7 @@ steps:
         path: /root/.m2
     commands:
       - mvn -v
-      - mvn clean -Pprd package -DskipTests=true -Dmaven.javadoc.skip=true
+      - mvn clean -P${DRONE_BRANCH} package -DskipTests=true -Dmaven.javadoc.skip=true
 
   # docker镜像推送
   - name: docker
@@ -40,7 +39,7 @@ steps:
       password:
         from_secret: docker_pwd
       mirror: https://wm9kcxms.mirror.aliyuncs.com
-      repo: registry-vpc.cn-hangzhou.aliyuncs.com/hbhb/auth-server
+      repo: registry-vpc.cn-hangzhou.aliyuncs.com/hbhb/auth-server-${DRONE_BRANCH}
       registry: registry-vpc.cn-hangzhou.aliyuncs.com
       tags: latest
       dockerfile: ./Dockerfile
@@ -50,7 +49,7 @@ steps:
     image: appleboy/drone-ssh
     settings:
       host:
-        from_secret: ssh_host
+        from_secret: ssh_host_${DRONE_BRANCH}
       port: 22
       username: root
       key:
@@ -59,10 +58,10 @@ steps:
       script_stop: false
       script:
         - cd ~
-        - docker-compose stop auth-server
-        - docker-compose rm -f auth-server
-        - docker rmi registry.cn-hangzhou.aliyuncs.com/hbhb/auth-server
-        - docker-compose up -d auth-server
+        - docker-compose stop auth-server-${DRONE_BRANCH}
+        - docker-compose rm -f auth-server-${DRONE_BRANCH}
+        - docker rmi registry.cn-hangzhou.aliyuncs.com/hbhb/auth-server-${DRONE_BRANCH}
+        - docker-compose up -d auth-server-${DRONE_BRANCH}
 
   # 钉钉通知
   - name: dingtalk
